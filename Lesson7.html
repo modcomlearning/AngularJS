@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container" ng-app="myApp" ng-controller="CalcController">
+        <h2>My Calc</h2>
+
+        <p>Enter Number 1</p>
+        <input type="number" ng-model="number1"><br>
+
+        <p>Enter Number 2</p>
+        <input type="number" ng-model="number2"><br><br>
+
+        <button ng-click="mycalc()" class="btn btn-success">
+            Click Me
+        </button>
+
+
+        <h3>Add : {{answer_addition}}</h3>
+        <h3>Multi : {{answer_multiply}}</h3>
+    </div>
+
+    <script>
+        var app = angular.module("myApp", [])
+        //Factory
+        app.factory('MathFactory', function () {
+            var factory = {};
+            // Add your methods here...
+            factory.multiply = function (a, b) {
+                return a * b;
+            };
+
+            factory.addition = function (a, b) {
+                return a + b;
+            };
+
+            console.log(factory);
+
+            return factory
+            //TODO: subtraction and division
+            //...
+        });
+
+        //Service, Inject the MathFactory
+        app.service('CalcService', function (MathFactory) {
+            this.add = function (a, b) {
+                return MathFactory.addition(a, b);
+            };
+
+            this.product = function (a, b) {
+                return MathFactory.multiply(a, b);
+            };
+
+        });
+
+        //Controller, Inject the CalcService
+        app.controller("CalcController", function ($scope, CalcService) {
+            //Provide arguments
+            // $scope.answer_addition = CalcService.add(4, 4);
+            // $scope.answer_multiply = CalcService.product(4, 4);
+
+            $scope.mycalc = function () {
+                $scope.answer_addition = CalcService.add($scope.number1, $scope.number2);
+                $scope.answer_multiply = CalcService.product($scope.number1, $scope.number2);
+            }
+
+
+        });
+
+
+
+    </script>
+</body>
+
+</html>
